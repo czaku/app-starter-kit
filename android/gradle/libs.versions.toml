@@ -19,7 +19,7 @@ navigation = "2.7.6"
 activity-compose = "1.8.2"
 hilt-navigation-compose = "1.1.0"
 ksp = "1.9.22-1.0.17"
-mockk = "1.13.9"
+mockk = "1.14.9"
 biometric = "1.1.0"
 
 [libraries]
