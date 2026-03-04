@@ -1,0 +1,14 @@
+{
+  "$sentinel": "1.0",
+  "type": "feature",
+  "id": "push-notifications",
+  "description": "Push notification registration and handling",
+  "categories": [
+    { "id": "auth", "description": "Authentication events (magic link delivery confirmation)" },
+    { "id": "system", "description": "Force update, maintenance alerts" }
+  ],
+  "platforms": {
+    "ios": { "provider": "APNs via FCM", "permissionRequired": true },
+    "android": { "provider": "FCM", "permissionRequired": true }
+  }
+}

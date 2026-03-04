@@ -187,6 +187,19 @@ When using this as a template:
 
 ---
 
+## Before Every Task
+
+```bash
+npx sentinel schema:validate
+```
+
+```bash
+# Install pre-commit hook (one-time):
+cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+```
+
+---
+
 ## Key Files Reference
 
 | File | Purpose |

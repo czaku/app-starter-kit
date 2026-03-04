@@ -1,0 +1,14 @@
+# TODO: Create a private GitHub repo to store encrypted certificates and profiles,
+#       then replace the URL below.
+#       Run `fastlane match init` once you have the repo ready.
+git_url "https://github.com/YOUR_ORG/appstarterkit-certs"
+
+storage_mode "git"
+
+# Default type used by `fastlane sync_certs`. Individual lanes override this.
+type "development"
+
+app_identifier ["com.appstarterkit.app"]
+
+# TODO: Uncomment and set username if you prefer not to be prompted each time.
+# username "your@email.com"

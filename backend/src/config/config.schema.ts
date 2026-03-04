@@ -1,0 +1,21 @@
+import * as Joi from 'joi';
+
+export const configSchema = Joi.object({
+  NODE_ENV: Joi.string().valid('development', 'staging', 'production').default('development'),
+  PORT: Joi.number().default(3000),
+  DATABASE_URL: Joi.string().required(),
+  JWT_SECRET: Joi.string().min(32).required(),
+  JWT_EXPIRY: Joi.string().default('15m'),
+  REFRESH_TOKEN_EXPIRY_DAYS: Joi.number().default(30),
+  MAGIC_LINK_EXPIRY_MINUTES: Joi.number().default(15),
+  REDIS_URL: Joi.string().default('redis://localhost:6379'),
+  SMTP_HOST: Joi.string().optional(),
+  SMTP_PORT: Joi.number().default(587),
+  SMTP_USER: Joi.string().optional(),
+  SMTP_PASS: Joi.string().optional(),
+  SMTP_FROM: Joi.string().email().default('noreply@yourapp.com'),
+  APP_VERSION_IOS_CURRENT: Joi.string().default('1.0.0'),
+  APP_VERSION_IOS_MINIMUM: Joi.string().default('1.0.0'),
+  APP_VERSION_ANDROID_CURRENT: Joi.string().default('1.0.0'),
+  APP_VERSION_ANDROID_MINIMUM: Joi.string().default('1.0.0'),
+});

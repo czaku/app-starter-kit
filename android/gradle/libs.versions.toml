@@ -20,6 +20,7 @@ activity-compose = "1.8.2"
 hilt-navigation-compose = "1.1.0"
 ksp = "1.9.22-1.0.17"
 mockk = "1.13.9"
+biometric = "1.1.0"
 
 [libraries]
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
@@ -49,6 +50,7 @@ junit5-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", ve
 junit5-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit5" }
 mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

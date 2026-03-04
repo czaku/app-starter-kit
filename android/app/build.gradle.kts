@@ -95,6 +95,14 @@ dependencies {
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
     implementation("com.google.android.play:review-ktx:2.0.1")
     implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.biometric)
+
+    // TODO: Add google-services.json from Firebase Console, then uncomment these dependencies
+    //       and apply plugin 'com.google.gms.google-services' + 'com.google.firebase.crashlytics'
+    // val firebaseBom = platform("com.google.firebase:firebase-bom:32.7.0")
+    // implementation(firebaseBom)
+    // implementation("com.google.firebase:firebase-crashlytics-ktx")
+    // implementation("com.google.firebase:firebase-analytics-ktx")
     testImplementation(libs.junit5.api)
     testImplementation(libs.junit5.params)
     testRuntimeOnly(libs.junit5.engine)

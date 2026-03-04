@@ -13,6 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class ApiClient @Inject constructor(
     private val securePreferences: SecurePreferences,
+    private val tokenAuthenticator: TokenAuthenticator,
 ) {
     private val authInterceptor = Interceptor { chain ->
         val token = securePreferences.getAccessToken()
@@ -28,6 +29,7 @@ class ApiClient @Inject constructor(
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(authInterceptor)
+        .authenticator(tokenAuthenticator)
         .apply {
             if (BuildConfig.DEBUG) {
                 addInterceptor(HttpLoggingInterceptor().apply {

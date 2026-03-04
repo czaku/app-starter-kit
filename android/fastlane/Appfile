@@ -1,0 +1,8 @@
+# TODO: Download your Google Play service account JSON key from:
+#   Google Play Console → Setup → API access → Create new service account
+#   Grant the service account "Release manager" permissions in Google Play Console.
+#   Save the downloaded JSON file at the path below.
+json_key_file "fastlane/google-play-key.json"
+
+# TODO: Update this to match your final production package name if you rename the app.
+package_name "com.appstarterkit.app"

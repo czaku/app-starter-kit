@@ -24,6 +24,7 @@ class AuthViewModel @Inject constructor(
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
 
     fun requestCode(email: String) {
+        if (email.isBlank()) return
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             authRepository.requestMagicLink(email)
@@ -38,6 +39,20 @@ class AuthViewModel @Inject constructor(
             authRepository.verifyMagicLink(email, code)
                 .onSuccess { _uiState.value = _uiState.value.copy(isLoading = false, isAuthenticated = true) }
                 .onFailure { _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = "Invalid code. Please try again.") }
+        }
+    }
+
+    /**
+     * Signs the user out. Calls [AuthRepository.logout] (which fires DELETE /auth/session
+     * and clears local tokens), then invokes [onComplete] so the NavHost can navigate
+     * back to the welcome screen.
+     */
+    fun logout(onComplete: () -> Unit) {
+        viewModelScope.launch {
+            authRepository.logout()
+            // Reset UI state so a fresh login flow starts cleanly.
+            _uiState.value = AuthUiState()
+            onComplete()
         }
     }
 }

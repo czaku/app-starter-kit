@@ -16,6 +16,43 @@ class AuthViewModel {
 
     private let authService = AuthService()
 
+    // Strong reference to the observation token so it lives as long as the ViewModel.
+    private var deepLinkObserver: NSObjectProtocol?
+
+    init() {
+        // Listen for deep-link OTP codes. If the auth flow is active (the user is on
+        // the code-entry screen), we auto-populate the OTP field so they don't have
+        // to type it manually.
+        deepLinkObserver = NotificationCenter.default.addObserver(
+            forName: .deepLinkOTPReceived,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self,
+                  let code = notification.userInfo?["code"] as? String else { return }
+            self.handleDeepLinkCode(code)
+        }
+    }
+
+    deinit {
+        if let observer = deepLinkObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
+
+    // MARK: - Deep-link OTP
+
+    /// Auto-populates `codeInput` when a deep-link arrives, but only if the user is
+    /// currently on the code-entry step. The view observes `codeInput` and will update
+    /// its digit boxes accordingly.
+    func handleDeepLinkCode(_ code: String) {
+        // Only pre-fill if we're on the code-entry screen.
+        guard case .enterCode = step else { return }
+        codeInput = code
+    }
+
+    // MARK: - Auth flow
+
     func requestCode() async {
         guard !emailInput.isEmpty else { return }
         isLoading = true

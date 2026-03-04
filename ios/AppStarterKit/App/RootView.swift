@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootView: View {
     @Environment(AppState.self) private var appState
+    @Environment(ToastManager.self) private var toastManager
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -28,6 +29,7 @@ struct RootView: View {
             }
         }
         .animation(.easeInOut(duration: 0.3), value: appState.networkMonitor.isConnected)
+        .toastOverlay()
         .task {
             await appState.forceUpdateChecker.checkForUpdate()
         }

@@ -6,6 +6,8 @@ import javax.inject.Inject
 interface AuthRepository {
     suspend fun requestMagicLink(email: String): Result<Unit>
     suspend fun verifyMagicLink(email: String, code: String): Result<AuthResponse>
+    /** Invalidates the server session and clears all locally stored tokens. */
+    suspend fun logout()
 }
 
 class AuthRepositoryImpl @Inject constructor(
@@ -21,5 +23,12 @@ class AuthRepositoryImpl @Inject constructor(
         securePreferences.saveAccessToken(response.accessToken)
         securePreferences.saveRefreshToken(response.refreshToken)
         response
+    }
+
+    override suspend fun logout() {
+        // Fire-and-forget: tell the server to invalidate the session.
+        // Ignore any errors — the local state is always cleared regardless.
+        runCatching { apiService.deleteSession() }
+        securePreferences.clearAll()
     }
 }

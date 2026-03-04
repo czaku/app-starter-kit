@@ -1,5 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiQuery, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { PrismaService } from '../prisma/prisma.service';
 
 @ApiTags('app')
@@ -8,8 +9,11 @@ export class AppVersionController {
   constructor(private readonly prisma: PrismaService) {}
 
   @Get('version-check')
+  @SkipThrottle()
+  @ApiOperation({ summary: 'Check whether the client app version requires or recommends an update' })
   @ApiQuery({ name: 'platform', required: true, example: 'ios' })
   @ApiQuery({ name: 'version', required: true, example: '1.0.0' })
+  @ApiResponse({ status: 200, description: 'Returns update requirement and latest version info' })
   async versionCheck(
     @Query('platform') platform: string,
     @Query('version') version: string,

@@ -27,6 +27,8 @@
         <key>UIApplicationSupportsMultipleScenes</key>
         <true/>
     </dict>
+    <key>NSFaceIDUsageDescription</key>
+    <string>AppStarterKit uses Face ID to protect your account.</string>
     <key>UILaunchScreen</key>
     <dict/>
 </dict>

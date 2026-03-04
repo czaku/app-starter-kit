@@ -106,4 +106,8 @@ export class AuthService {
       data: { revokedAt: new Date() },
     });
   }
+
+  async logout(userId: string): Promise<void> {
+    await this.prisma.refreshToken.deleteMany({ where: { userId } });
+  }
 }

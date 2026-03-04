@@ -17,15 +17,19 @@
 		522F4CA0084873D8F7D00E2E /* auth-verify.json in Resources */ = {isa = PBXBuildFile; fileRef = AB282A763C4B8E8E1B2AEB4B /* auth-verify.json */; };
 		53BB9828CF3D58BDA6ED5771 /* health.json in Resources */ = {isa = PBXBuildFile; fileRef = 0DECE0EF2680A1902C68CFB3 /* health.json */; };
 		552BE2769AC67AE4B17B0179 /* HardUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5A484FF959287EA6B0ACF3 /* HardUpdateView.swift */; };
+		5B23792D87DCF29356B106F4 /* ShimmerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2365D549421733543A3A949 /* ShimmerView.swift */; };
 		6CE09738465F4CF23D21A064 /* EmailInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F56B48C9B4CA382CE7359BF /* EmailInputView.swift */; };
 		6F388C9DDF9C10C44473297B /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA85E493D92CD481565427E /* MainTabView.swift */; };
 		73C3B9DBD19C2B62B55C51F6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FC432D1A6D3D58E205274A /* AppState.swift */; };
+		7B410073C2100AE6ACEA2CE9 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73EAC84D9D8A0CAD52BA173 /* Toast.swift */; };
 		7D34008F7CBDB9EBCF8DA4EA /* AppTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44C16C0129EA3F4B1A7CF1D /* AppTokens.swift */; };
+		7DF94843E6EF2B495E9ABDD5 /* BiometricHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4751C167A9F6D1E2E0EA03A9 /* BiometricHelperTests.swift */; };
 		81368FA51FCB2ECB41F6D0C4 /* AppTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69014874DC3059AA02FE9E68 /* AppTextField.swift */; };
 		82475021EFE17B64800F11DC /* AppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24428AE7A3F01CE890DCFB07 /* AppButton.swift */; };
 		8542B1C961AE305CB3BC0BDD /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B926B70FC158BDEABF4CF24B /* EmptyStateView.swift */; };
 		8A0C041487A7D8DF82F9907A /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E2ED6A10CE98E5B4F6925D /* APIClient.swift */; };
 		8AE4C06434D04BCA31173FD0 /* ReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBB71CDA3692A603F78BB23 /* ReviewManager.swift */; };
+		A128E5F7D314A13ED18DD3B1 /* BiometricHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374DC7878F224B21434A478 /* BiometricHelper.swift */; };
 		A799AB583C820980BE2EA31F /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FC847413EB72C1906C74B2 /* KeychainHelper.swift */; };
 		B44090AE8D0CA5DD528D070C /* AuthServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE8EA7D6739EF6F343D7F7B /* AuthServiceTests.swift */; };
 		B9A64D9A5D54F435C75AAE7F /* AppCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5B275506460DB27180086B /* AppCard.swift */; };
@@ -35,6 +39,7 @@
 		C2CCC55D54F9F6CE1DFD7B95 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E219DDE85E5E99E59482A19F /* AuthService.swift */; };
 		C6A7B7C1A81829045C883736 /* auth-refresh.json in Resources */ = {isa = PBXBuildFile; fileRef = 22755C14870B415837CA9A51 /* auth-refresh.json */; };
 		CA0BE56210FC4743D283A802 /* auth-request.json in Resources */ = {isa = PBXBuildFile; fileRef = 44AAC60C56E77F607A9879D5 /* auth-request.json */; };
+		D0970E1F4BB5A3D2979F7FC2 /* HapticsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D0653549D9CE2164AAD99 /* HapticsHelper.swift */; };
 		E132108C0975A29F7296DD6B /* SoftUpdateBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5FA9EE8B6C4CDA52F01D78 /* SoftUpdateBanner.swift */; };
 		F11AA6959B37DED302DBFE61 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881D54DECD3BC5A105A100A1 /* HomeView.swift */; };
 		F1FC5765669108BDAD55886E /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E4382A4C4FD9B2BCC8B338 /* WelcomeView.swift */; };
@@ -73,6 +78,7 @@
 		36BDFA704F671213FA685766 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		44AAC60C56E77F607A9879D5 /* auth-request.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "auth-request.json"; sourceTree = "<group>"; };
 		45069CFF144450C2D80AFA52 /* AppStarterKit.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AppStarterKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4751C167A9F6D1E2E0EA03A9 /* BiometricHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricHelperTests.swift; sourceTree = "<group>"; };
 		558BC02C80D9CF3EEFCA4702 /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		56C70ECD48796FCCA875BF21 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		5DBB71CDA3692A603F78BB23 /* ReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewManager.swift; sourceTree = "<group>"; };
@@ -80,6 +86,7 @@
 		69014874DC3059AA02FE9E68 /* AppTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextField.swift; sourceTree = "<group>"; };
 		74D0310EA4E24746FE14A012 /* CodeEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEntryView.swift; sourceTree = "<group>"; };
 		8332D52BEBA8075560AE449D /* OfflineBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBanner.swift; sourceTree = "<group>"; };
+		8374DC7878F224B21434A478 /* BiometricHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricHelper.swift; sourceTree = "<group>"; };
 		881D54DECD3BC5A105A100A1 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		9B1591E7B72A16BB3035D0C0 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		9CA85E493D92CD481565427E /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
@@ -90,6 +97,7 @@
 		B5FC432D1A6D3D58E205274A /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		B8B1741F4D4F3498E5736CAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B926B70FC158BDEABF4CF24B /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		C71D0653549D9CE2164AAD99 /* HapticsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsHelper.swift; sourceTree = "<group>"; };
 		C95CB044C3D75B324F9CF3BA /* StarterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarterApp.swift; sourceTree = "<group>"; };
 		D44C16C0129EA3F4B1A7CF1D /* AppTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTokens.swift; sourceTree = "<group>"; };
 		D92B4A2F88E896A9C4E46F75 /* AppStarterKitTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AppStarterKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,7 +106,9 @@
 		E219DDE85E5E99E59482A19F /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		E86417965D39F0D0A2581776 /* ForceUpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateChecker.swift; sourceTree = "<group>"; };
 		EE5A484FF959287EA6B0ACF3 /* HardUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardUpdateView.swift; sourceTree = "<group>"; };
+		F2365D549421733543A3A949 /* ShimmerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerView.swift; sourceTree = "<group>"; };
 		F4E4382A4C4FD9B2BCC8B338 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		F73EAC84D9D8A0CAD52BA173 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		FC5B275506460DB27180086B /* AppCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,6 +146,7 @@
 				443C056E6E8925BB50736256 /* Models */,
 				8835DE994137620A52850FD8 /* Network */,
 				3BB0AF6BEFAF16DAA5CB1D35 /* NFR */,
+				C004B4C22F03AF995BD10D2F /* Utilities */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -144,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				2FE8EA7D6739EF6F343D7F7B /* AuthServiceTests.swift */,
+				4751C167A9F6D1E2E0EA03A9 /* BiometricHelperTests.swift */,
 				3DAD4CC862C39D57E4C0CA2D /* Fixtures */,
 				0CF8252A78D560B266D92EB6 /* Helpers */,
 			);
@@ -243,6 +255,7 @@
 		93E2246C58EA9AF101BC6971 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				8374DC7878F224B21434A478 /* BiometricHelper.swift */,
 				02FC847413EB72C1906C74B2 /* KeychainHelper.swift */,
 			);
 			path = Auth;
@@ -278,6 +291,14 @@
 			path = Tokens;
 			sourceTree = "<group>";
 		};
+		C004B4C22F03AF995BD10D2F /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				C71D0653549D9CE2164AAD99 /* HapticsHelper.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		F5852A9877904818829ABE17 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -286,6 +307,8 @@
 				69014874DC3059AA02FE9E68 /* AppTextField.swift */,
 				B926B70FC158BDEABF4CF24B /* EmptyStateView.swift */,
 				9B1591E7B72A16BB3035D0C0 /* LoadingView.swift */,
+				F2365D549421733543A3A949 /* ShimmerView.swift */,
+				F73EAC84D9D8A0CAD52BA173 /* Toast.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -422,10 +445,12 @@
 				C1CD7A9979B7182615220A14 /* AuthFlowView.swift in Sources */,
 				C2CCC55D54F9F6CE1DFD7B95 /* AuthService.swift in Sources */,
 				2DBD677C904A691E9D304098 /* AuthViewModel.swift in Sources */,
+				A128E5F7D314A13ED18DD3B1 /* BiometricHelper.swift in Sources */,
 				0BCE804D51D67B59C136B67D /* CodeEntryView.swift in Sources */,
 				6CE09738465F4CF23D21A064 /* EmailInputView.swift in Sources */,
 				8542B1C961AE305CB3BC0BDD /* EmptyStateView.swift in Sources */,
 				F66FB6DBE3A6F0C3FFBF452D /* ForceUpdateChecker.swift in Sources */,
+				D0970E1F4BB5A3D2979F7FC2 /* HapticsHelper.swift in Sources */,
 				552BE2769AC67AE4B17B0179 /* HardUpdateView.swift in Sources */,
 				F11AA6959B37DED302DBFE61 /* HomeView.swift in Sources */,
 				A799AB583C820980BE2EA31F /* KeychainHelper.swift in Sources */,
@@ -435,8 +460,10 @@
 				BA27F4B76E8BF9BC87442076 /* OfflineBanner.swift in Sources */,
 				8AE4C06434D04BCA31173FD0 /* ReviewManager.swift in Sources */,
 				F6ADAB31B2C2F166DE02B5EA /* RootView.swift in Sources */,
+				5B23792D87DCF29356B106F4 /* ShimmerView.swift in Sources */,
 				E132108C0975A29F7296DD6B /* SoftUpdateBanner.swift in Sources */,
 				4E3B41F627630B77DE7C7E27 /* StarterApp.swift in Sources */,
+				7B410073C2100AE6ACEA2CE9 /* Toast.swift in Sources */,
 				F1FC5765669108BDAD55886E /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -446,6 +473,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B44090AE8D0CA5DD528D070C /* AuthServiceTests.swift in Sources */,
+				7DF94843E6EF2B495E9ABDD5 /* BiometricHelperTests.swift in Sources */,
 				B9F0C9F4A7D3119F4515206D /* MockURLProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

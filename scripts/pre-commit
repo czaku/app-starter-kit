@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Git pre-commit hook — validates sentinel schemas before every commit.
+# Install: cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -euo pipefail
+
+echo "Running sentinel schema validation..."
+if npx --yes sentinel schema:validate 2>/dev/null; then
+  echo "✓ Schemas valid"
+else
+  echo "✗ Schema validation failed. Fix errors before committing."
+  exit 1
+fi

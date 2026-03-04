@@ -3,6 +3,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Required by androidx.biometric to use device credential (PIN/pattern/password) fallback -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <application
         android:name=".app.AppStarterKit"
@@ -14,11 +16,41 @@
         <activity
             android:name=".app.MainActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppStarterKit">
+
+            <!-- Standard launcher intent -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!--
+                Deep link: magic-link email verification.
+
+                HTTPS variant requires a /.well-known/assetlinks.json file hosted at
+                yourapp.com to enable android:autoVerify="true" App Links.
+                Until that file is live, the custom scheme (appstarterkit://) will work
+                as a fallback without verification.
+
+                URI patterns handled:
+                  https://yourapp.com/auth/verify?code=XXXXXXXX
+                  appstarterkit://auth/verify?code=XXXXXXXX
+            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="yourapp.com" android:pathPrefix="/auth/verify" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="appstarterkit" android:host="auth" android:pathPrefix="/verify" />
+            </intent-filter>
+
         </activity>
     </application>
 

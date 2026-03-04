@@ -1,0 +1,26 @@
+{
+  "$sentinel": "1.0",
+  "type": "navigation",
+  "description": "App navigation structure",
+  "tabs": [],
+  "flows": [
+    {
+      "id": "auth",
+      "screens": ["welcome", "email-input", "code-entry"],
+      "entry": "welcome"
+    },
+    {
+      "id": "main",
+      "screens": ["home"],
+      "entry": "home"
+    }
+  ],
+  "deeplinks": [
+    {
+      "pattern": "/auth/verify",
+      "params": ["code"],
+      "navigatesTo": "code-entry",
+      "description": "Magic link OTP deeplink from email"
+    }
+  ]
+}

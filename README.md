@@ -166,3 +166,54 @@ Workflow templates are in `.github/workflows/` with **manual trigger only** (`on
 See `docs/setup/GITHUB_ACTIONS.md` for full setup instructions.
 
 To activate automatic runs, add `push` / `pull_request` triggers to each workflow file.
+
+---
+
+## What's included
+
+### Platform foundations
+- [x] iOS: SwiftUI + `@Observable` MVVM, SwiftData-ready, iOS 17+
+- [x] Android: Jetpack Compose + ViewModel + StateFlow, API 26+
+- [x] Backend: NestJS + Prisma + PostgreSQL + BullMQ + Redis
+
+### Authentication
+- [x] Magic link (email OTP) — no passwords
+- [x] JWT + refresh tokens with auto-rotation
+- [x] Token refresh interceptor (auto-retry on 401)
+- [x] Logout (client + server-side token revocation)
+- [x] Keychain (iOS) + EncryptedSharedPreferences (Android) storage
+- [x] Biometric auth (Face ID / Touch ID / Fingerprint)
+- [x] Deeplink handler for magic link tap-to-login
+
+### Design system
+- [x] Sentinel-generated design tokens (colors, spacing, typography, radius)
+- [x] AppButton, AppCard, AppTextField, EmptyState, LoadingView
+- [x] Toast / Snackbar feedback system
+- [x] Shimmer skeleton loading
+- [x] Haptics helper (iOS)
+- [x] Dark mode ready
+
+### NFRs
+- [x] Offline banner (connectivity detection)
+- [x] Force update + soft update banners (Firebase Remote Config compatible)
+- [x] In-app review prompt (SKStoreReviewController / ReviewManager)
+- [x] Crashlytics stub (Firebase, ready to configure)
+
+### Backend
+- [x] Magic link auth with BullMQ email queue + SMTP
+- [x] Rate limiting (@nestjs/throttler)
+- [x] OpenAPI / Swagger docs at /api/docs
+- [x] Config validation (fail-fast on missing env vars)
+- [x] Push notification stub module (FCM-ready)
+- [x] App version enforcement endpoint
+
+### Developer experience
+- [x] Sentinel schema validation + code generation
+- [x] Claude Code hooks (block generated files, dangerous git)
+- [x] `scripts/rename.sh` — one-command project rename
+- [x] Fixture-driven tests (MockURLProtocol + MockWebServer)
+- [x] Backend E2E tests + contract validation
+- [x] Fastlane (iOS TestFlight + Android Play Store)
+- [x] GitHub Actions (backend + iOS + Android CI)
+- [x] Dependabot for automated dependency updates
+- [x] Pre-commit hook for schema validation

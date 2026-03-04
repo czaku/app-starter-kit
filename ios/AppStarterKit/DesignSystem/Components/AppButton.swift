@@ -26,6 +26,8 @@ struct AppButton: View {
 
     var body: some View {
         Button {
+            let feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = style == .destructive ? .rigid : .medium
+            HapticsHelper.impact(feedbackStyle)
             Task { await action() }
         } label: {
             ZStack {
