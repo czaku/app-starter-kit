@@ -2,7 +2,7 @@
 
 Production-ready mobile app starter: **NestJS API + iOS (SwiftUI) + Android (Compose)**.
 
-Magic link auth, design tokens, offline indicator, force update, review prompt — all wired up and ready to restyle.
+Magic link auth, social sign-in, design tokens, offline indicator, force update, review prompt, subscriptions, admin panel, Terraform infra — all wired up and ready to rename.
 
 ---
 
@@ -10,11 +10,11 @@ Magic link auth, design tokens, offline indicator, force update, review prompt �
 
 | Platform | Language | UI | DB | Auth |
 |----------|----------|----|----|------|
-| Backend | TypeScript | NestJS 10 | PostgreSQL (Prisma 5) | Magic link + JWT |
-| iOS | Swift | SwiftUI + SwiftData | — | KeychainHelper |
+| Backend | TypeScript | NestJS 10 | PostgreSQL 16 (Prisma 5) | Magic link + JWT + Social |
+| iOS | Swift | SwiftUI | — | Keychain |
 | Android | Kotlin | Jetpack Compose | Room | EncryptedSharedPreferences |
 
-**Backend services:** Redis (BullMQ email queue) · Swagger at `/api/docs`
+**Backend services:** Redis (BullMQ) · Swagger at `/api/docs` · Rate limiting · FCM push stub
 
 ---
 
@@ -23,197 +23,250 @@ Magic link auth, design tokens, offline indicator, force update, review prompt �
 ### 1. Clone and rename
 
 ```bash
-# Use this repo as a GitHub template, then:
-find . -type f \( -name "*.swift" -o -name "*.kt" -o -name "*.ts" -o -name "*.json" -o -name "*.gradle.kts" -o -name "*.yml" -o -name "*.yaml" -o -name "*.md" -o -name "*.xml" -o -name "*.xcconfig" -o -name "*.plist" \) \
-  -exec sed -i '' 's/AppStarterKit/MyApp/g; s/starter\.app/myapp/g; s/app-starter-kit/my-app/g' {} \;
+# Use this repo as a GitHub template, then run the interactive rename script:
+./scripts/rename.sh
+
+# Or non-interactively:
+./scripts/rename.sh "MyApp" "com.mycompany.myapp"
 ```
 
-### 2. Backend
+The script replaces all occurrences of `AppStarterKit`, `com.appstarterkit.app`, and `app-starter-kit` across every platform, renames source directories, and regenerates the xcodeproj.
+
+### 2. Start local infrastructure
+
+```bash
+./scripts/start-local.sh
+# Starts postgres:16 + redis:7 via Docker Compose, runs migrations + seed
+```
+
+### 3. Backend
 
 ```bash
 cd backend
-cp .env.example .env          # fill in DATABASE_URL, JWT_SECRET, REDIS_URL
-docker-compose up -d          # starts postgres:15 + redis:7
+cp .env.example .env    # fill in JWT_SECRET, SMTP settings, etc.
 npm install
-npx prisma migrate dev        # creates tables
-npx prisma db seed            # seeds AppVersion rows
-npm run start:dev             # http://localhost:3000/api/v1
+npm run start:dev       # http://localhost:3000/api/v1
 # Swagger UI: http://localhost:3000/api/docs
 ```
 
-### 3. iOS
+### 4. iOS
 
 ```bash
 cd ios
-brew install xcodegen         # if not installed
-xcodegen generate             # generates AppStarterKit.xcodeproj
+brew install xcodegen   # if not installed
+xcodegen generate
 open AppStarterKit.xcodeproj
 # Select scheme AppStarterKit-Dev and run
 ```
 
-### 4. Android
+### 5. Android
 
 ```bash
 cd android
-./gradlew assembleDevDebug    # builds dev debug APK
-# Or open in Android Studio and run with dev flavour
+./gradlew assembleDevDebug
+# Or open in Android Studio, select dev flavour
 ```
 
 ---
 
-## Architecture
+## What's Included
 
-### Auth flow (all platforms)
+### Authentication
+- Magic link (email OTP) — no passwords, no friction
+- JWT + refresh tokens with auto-rotation and server-side revocation
+- Token refresh interceptor (silent 401 retry on both platforms)
+- Logout (client-side clear + server token revocation)
+- Keychain (iOS) / EncryptedSharedPreferences (Android) secure storage
+- Biometric auth (Face ID / Touch ID on iOS, BiometricPrompt on Android)
+- Deep link handler (magic link tap-to-login auto-fills OTP field)
+- **Sign in with Apple** (iOS only — full `ASAuthorizationController` impl)
+- **Sign in with Google** (iOS + Android — SDK stubs with TODO comments)
+
+### Design System
+- Sentinel-generated design tokens (colours, spacing, typography, radius)
+- Dark mode first
+- Components: AppButton, AppCard, AppTextField, EmptyStateView, LoadingView
+- Toast / Snackbar notification system with auto-dismiss
+- Shimmer skeleton loading
+- Haptics helper (iOS)
+- `SignInWithAppleButton` (UIViewRepresentable) + `SignInWithGoogleButton` (SwiftUI)
+
+### NFRs
+- Offline banner (NWPathMonitor on iOS / ConnectivityManager on Android)
+- Force update screen (blocking, undismissable) + soft update banner
+- In-app review prompt (SKStoreReviewController / Play In-App Review)
+- Crashlytics stub (Firebase, ready to configure)
+
+### Subscriptions
+- `SubscriptionManager` stub on both platforms (RevenueCat-shaped API)
+- `SubscriptionTier` enum (FREE / TRACKER)
+- `TrackerFeature` gating (free features always return `true`)
+- `PaywallView` (iOS) with trial CTA + restore
+- TODOs for adding RevenueCat SDK
+
+### Backend API
+- Magic link auth with BullMQ email queue
+- `POST /auth/social` endpoint (Apple + Google — verify TODOs)
+- Rate limiting (`@nestjs/throttler`, 5 req/60s on auth endpoints)
+- OpenAPI / Swagger (`/api/docs`)
+- Config validation with joi (fail-fast on missing env vars)
+- Global exception filter — structured error envelope, Prisma error mapping
+- Correlation ID middleware (`X-Correlation-ID` on every request/response)
+- Logging interceptor (`METHOD /path → status [Xms]`)
+- Pagination helpers: cursor-based + offset, opaque base64 cursor, `paginateQuery<T>`
+- Soft delete Prisma extension (auto-injects `deletedAt: null` on all queries)
+- Admin role (`UserRole` enum) + `AdminGuard` + `GET /admin/users` + `GET /admin/stats`
+- Push notification stub module (FCM-ready)
+- App version enforcement endpoint (`GET /app/version-check`)
+
+### CRUD Resource Template
+
+`backend/src/_templates/resource/` — copy-paste scaffold for any new domain:
 
 ```
-WelcomeScreen
-    ↓ "Get Started"
-EmailInputScreen → POST /auth/magic-link/request
-    ↓ receives 8-digit code by email
-CodeEntryScreen  → POST /auth/magic-link/verify
-    ↓ receives JWT + refresh token
-HomeScreen
+resource/
+├── entity.ts          # Prisma-mapped class
+├── create-resource.dto.ts
+├── update-resource.dto.ts
+├── resource-response.dto.ts
+├── resource.service.ts  # cursor pagination + soft delete included
+├── resource.controller.ts
+├── resource.module.ts
+├── resource.service.spec.ts
+└── README.md
 ```
 
-The 8-digit OTP is generated server-side with `crypto.randomInt`, stored in `magic_links` table with a 15-minute expiry. JWT access tokens expire in 15 minutes; refresh tokens last 30 days.
+### Infrastructure
 
-### NFRs included
+| Tool | Location | Purpose |
+|------|----------|---------|
+| Docker Compose | `docker-compose.yml` | Local postgres 16 + redis 7 |
+| Dockerfile | `backend/Dockerfile` | Multi-stage, non-root, health check |
+| Terraform | `infra/terraform/` | GCP Cloud Run + Cloud SQL + Redis + Secret Manager |
+| Deploy workflow | `.github/workflows/deploy.yml` | Manual Cloud Run deploy (staging / production) |
 
-| Feature | iOS | Android | Backend |
-|---------|-----|---------|---------|
-| Force update (hard) | HardUpdateView (full-screen, undismissable) | HardUpdateScreen | GET /app/version-check |
-| Force update (soft) | SoftUpdateBanner (dismissable) | SoftUpdateBanner | GET /app/version-check |
-| Offline indicator | OfflineBanner (NWPathMonitor) | OfflineBanner (ConnectivityManager) | — |
-| App review prompt | ReviewManager (SKStoreReviewController) | ReviewManager (Play In-App Review) | — |
+```
+infra/terraform/
+├── main.tf, variables.tf
+├── envs/staging.tfvars
+└── modules/
+    ├── cloud-run/
+    ├── cloud-sql/
+    ├── redis/
+    └── secrets/      # Secret Manager + Cloud Run SA IAM bindings
+```
 
-### Design tokens
+### Testing
 
-All colours, spacing, and radius values live in `AppTokens` (iOS) and `AppColors/AppSpacing/AppRadius` (Android). To restyle for a new project, change the values there — every component inherits them.
+| Layer | Tool | Location |
+|-------|------|----------|
+| Backend unit | Jest | `backend/src/**/*.spec.ts` |
+| Backend E2E | Supertest | `backend/test/` |
+| iOS unit | XCTest | `ios/AppStarterKitTests/` |
+| iOS E2E | Maestro | `ios/e2e/` |
+| Android unit | JUnit 5 + MockK | `android/app/src/test/` |
+| Android E2E | Detox | `android/e2e/` |
+| Load tests | k6 | `load-tests/` |
+| Mutation tests | Stryker | `backend/stryker.conf.json` |
+
+**k6 load test profiles:**
+- `npm run smoke` — 1 VU, 30s (sanity check)
+- `npm run load` — ramp to 50 VUs over 1 min, hold 3 min
+- `npm run stress` — ramp to 200 VUs (observation mode)
+
+### Developer Experience
+- `scripts/rename.sh` — interactive project rename (name + bundle ID)
+- `scripts/start-local.sh` — one-command local stack (Docker + migrations + seed)
+- `scripts/reset-local.sh` — destructive local reset with confirmation prompt
+- Sentinel schema validation + code generation
+- Claude Code hooks (block generated file edits, warn on dangerous git)
+- Fastlane (iOS: TestFlight + App Store lanes; Android: Play Store internal + production)
+- GitHub Actions CI (backend + iOS + Android, on push to main + PRs)
+- GitHub Actions deploy (manual `workflow_dispatch`, staging + production)
+- Dependabot (npm, Swift packages, Gradle, GitHub Actions — weekly)
+- Pre-commit hook: runs `npx sentinel schema:validate` before every commit
+- Postman collection with token-saving test scripts (`backend/postman/`)
+- Stryker mutation testing config (targeting auth + common)
 
 ---
 
 ## Environments
 
-Three environments on every platform:
-
 | Env | iOS Scheme | Android Flavour | API URL |
 |-----|-----------|-----------------|---------|
-| Dev | AppStarterKit-Dev | dev | `http://localhost:3000/api/v1` (iOS: `http://10.0.2.2:3000/api/v1` Android) |
+| Dev | AppStarterKit-Dev | dev | `http://localhost:3000/api/v1` (Android: `http://10.0.2.2:3000/api/v1`) |
 | Staging | AppStarterKit-Staging | staging | `https://api-staging.yourapp.com/api/v1` |
 | Production | AppStarterKit-Release | prod | `https://api.yourapp.com/api/v1` |
 
-Update the URLs in `ios/Configs/*.xcconfig` and `android/app/build.gradle.kts`.
+Update URLs in `ios/Configs/*.xcconfig` and `android/app/build.gradle.kts`.
 
 ---
 
-## Project structure
+## Project Structure
 
 ```
 app-starter-kit/
-├── backend/                  # NestJS API
+├── backend/
 │   ├── src/
-│   │   ├── auth/             # Magic link auth
+│   │   ├── auth/             # Magic link auth + social auth + JWT
 │   │   ├── user/             # User profile
+│   │   ├── admin/            # Admin-only endpoints
 │   │   ├── health/           # GET /health
 │   │   ├── app-version/      # Force update check
-│   │   └── prisma/           # PrismaService (global)
-│   ├── prisma/
-│   │   ├── schema.prisma
-│   │   └── seed.ts
-│   └── docker-compose.yml
+│   │   ├── notification/     # FCM push stub
+│   │   ├── common/           # Filters, interceptors, middleware, pagination
+│   │   ├── config/           # Joi-validated config schema
+│   │   ├── prisma/           # PrismaService + soft-delete extension
+│   │   └── _templates/resource/  # CRUD scaffold template
+│   ├── prisma/schema.prisma
+│   ├── postman/              # Postman collection + environment
+│   ├── Dockerfile
+│   └── stryker.conf.json
 ├── ios/
-│   ├── project.yml           # XcodeGen config
+│   ├── project.yml
 │   ├── Configs/              # xcconfig per env
+│   ├── fastlane/
+│   ├── e2e/                  # Maestro flows
 │   └── AppStarterKit/
 │       ├── App/              # Entry point, RootView, AppState
-│       ├── Features/Auth/    # Auth flow (Welcome → Email → Code)
-│       ├── Features/Home/    # Home placeholder
+│       ├── Features/
+│       │   ├── Auth/         # Welcome → Email → Code + SocialAuth/
+│       │   ├── Home/
+│       │   └── More/         # ProfileView, PaywallView
 │       ├── DesignSystem/     # Tokens + Components
-│       └── Core/             # APIClient, NetworkMonitor, KeychainHelper, NFRs
+│       └── Core/             # APIClient, Network, Keychain, Biometric, Subscription
 ├── android/
-│   ├── app/src/main/
-│   │   └── kotlin/com/starter/app/
-│   │       ├── app/          # Application + MainActivity
-│   │       ├── features/     # Auth + Home
-│   │       ├── design/       # Tokens + Components
-│   │       ├── core/         # Network, Storage, DB, DI
-│   │       └── nfr/          # ForceUpdate, ReviewManager
-│   └── gradle/libs.versions.toml
+│   ├── app/src/main/kotlin/com/appstarterkit/app/
+│   │   ├── app/              # Application + MainActivity
+│   │   ├── features/auth/    # Auth flow
+│   │   ├── features/more/    # ProfileScreen
+│   │   ├── design/           # Tokens + Components
+│   │   └── core/             # Network, Auth, Biometric, Subscription, DeepLink
+│   ├── fastlane/
+│   └── e2e/                  # Detox tests
+├── infra/terraform/          # GCP infrastructure
+├── load-tests/               # k6 smoke/load/stress
 ├── sentinel/                 # Schema source of truth
 │   └── schemas/
-├── docs/
-│   └── setup/
-│       └── GITHUB_ACTIONS.md # CI setup guide
-└── .github/workflows/        # Workflow templates (manual trigger only)
+├── scripts/
+│   ├── rename.sh
+│   ├── start-local.sh
+│   └── reset-local.sh
+├── docker-compose.yml
+├── SETUP.md                  # Full setup walkthrough
+└── docs/ARCHITECTURE.md      # Auth flow, token lifecycle, module map
 ```
 
 ---
 
-## Customising for a new project
+## Customising for a New Project
 
-1. **Rename**: find/replace `AppStarterKit` → your app name, `starter.app` → your bundle ID
+1. **Run** `./scripts/rename.sh "YourApp" "com.yourcompany.yourapp"`
 2. **Colours**: update `AppTokens.Color.primary` (iOS) and `AppColors.Primary` (Android)
-3. **Backend URL**: update xcconfig files and `buildConfigField` in build.gradle.kts
-4. **App Store / Play Store links**: search for `YOUR_APP_ID` and `com.appstarterkit.app` in NFR files
-5. **Email template**: implement `email.processor.ts` with your SMTP or transactional email provider
-6. **Extend auth**: add user profile fields to Prisma schema + User module
-
----
-
-## CI/CD
-
-Workflow templates are in `.github/workflows/` with **manual trigger only** (`on: workflow_dispatch`).
-See `docs/setup/GITHUB_ACTIONS.md` for full setup instructions.
-
-To activate automatic runs, add `push` / `pull_request` triggers to each workflow file.
-
----
-
-## What's included
-
-### Platform foundations
-- [x] iOS: SwiftUI + `@Observable` MVVM, SwiftData-ready, iOS 17+
-- [x] Android: Jetpack Compose + ViewModel + StateFlow, API 26+
-- [x] Backend: NestJS + Prisma + PostgreSQL + BullMQ + Redis
-
-### Authentication
-- [x] Magic link (email OTP) — no passwords
-- [x] JWT + refresh tokens with auto-rotation
-- [x] Token refresh interceptor (auto-retry on 401)
-- [x] Logout (client + server-side token revocation)
-- [x] Keychain (iOS) + EncryptedSharedPreferences (Android) storage
-- [x] Biometric auth (Face ID / Touch ID / Fingerprint)
-- [x] Deeplink handler for magic link tap-to-login
-
-### Design system
-- [x] Sentinel-generated design tokens (colors, spacing, typography, radius)
-- [x] AppButton, AppCard, AppTextField, EmptyState, LoadingView
-- [x] Toast / Snackbar feedback system
-- [x] Shimmer skeleton loading
-- [x] Haptics helper (iOS)
-- [x] Dark mode ready
-
-### NFRs
-- [x] Offline banner (connectivity detection)
-- [x] Force update + soft update banners (Firebase Remote Config compatible)
-- [x] In-app review prompt (SKStoreReviewController / ReviewManager)
-- [x] Crashlytics stub (Firebase, ready to configure)
-
-### Backend
-- [x] Magic link auth with BullMQ email queue + SMTP
-- [x] Rate limiting (@nestjs/throttler)
-- [x] OpenAPI / Swagger docs at /api/docs
-- [x] Config validation (fail-fast on missing env vars)
-- [x] Push notification stub module (FCM-ready)
-- [x] App version enforcement endpoint
-
-### Developer experience
-- [x] Sentinel schema validation + code generation
-- [x] Claude Code hooks (block generated files, dangerous git)
-- [x] `scripts/rename.sh` — one-command project rename
-- [x] Fixture-driven tests (MockURLProtocol + MockWebServer)
-- [x] Backend E2E tests + contract validation
-- [x] Fastlane (iOS TestFlight + Android Play Store)
-- [x] GitHub Actions (backend + iOS + Android CI)
-- [x] Dependabot for automated dependency updates
-- [x] Pre-commit hook for schema validation
+3. **API URLs**: update `ios/Configs/*.xcconfig` and `android/app/build.gradle.kts`
+4. **App Store / Play Store IDs**: search `YOUR_APP_ID` in `HardUpdateView.swift` / `ForceUpdateComponents.kt`
+5. **Email**: implement `backend/src/email/email.processor.ts` with your SMTP provider
+6. **Social auth**: follow TODO comments in `AppleSignInHelper.swift`, `GoogleSignInHelper.swift`, `GoogleSignInHelper.kt`, and `backend/src/auth/auth.service.ts`
+7. **Subscriptions**: follow TODO comments in `SubscriptionManager.swift` / `SubscriptionManager.kt` for RevenueCat SDK
+8. **Firebase**: add `google-services.json` (Android) / `GoogleService-Info.plist` (iOS) and uncomment Crashlytics dependencies
+9. **Terraform**: fill in `infra/terraform/variables.tf` and `envs/staging.tfvars` with your GCP project
