@@ -103,6 +103,8 @@ dependencies {
     testImplementation(libs.mockk)
     androidTestImplementation(composeBom)
     androidTestImplementation(libs.compose.ui.test)
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 
 tasks.withType<Test> {

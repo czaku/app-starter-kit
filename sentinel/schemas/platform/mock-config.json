@@ -1,0 +1,9 @@
+{
+  "$sentinel": "1.0",
+  "type": "mock-config",
+  "id": "mock-config",
+  "fixtures": [
+    { "platform": "ios",     "path": "ios/StarterAppTests/Fixtures" },
+    { "platform": "android", "path": "android/app/src/test/resources/fixtures" }
+  ]
+}

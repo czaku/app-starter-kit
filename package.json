@@ -1,0 +1,16 @@
+{
+  "name": "app-starter-kit",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "schema:validate": "npx sentinel schema:validate",
+    "schema:generate": "npx sentinel schema:generate",
+    "sentinel:all": "npx sentinel all",
+    "validate:fixtures": "node scripts/validate-fixtures.js",
+    "test:backend": "cd backend && npm test",
+    "test:e2e": "cd backend && npm run test:e2e"
+  },
+  "devDependencies": {
+    "sentinel": "file:../sentinel"
+  }
+}
