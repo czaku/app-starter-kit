@@ -1,0 +1,31 @@
+sentinel: "1.0"
+project: starter-app
+
+# Sentinel is the source of truth for cross-platform consistency.
+# Install the Sentinel CLI: npm install (links sentinel from your local checkout).
+# Run before every task: npm run schema:validate
+# Run after schema edits: npm run schema:generate
+#
+# When schema:generate runs, it writes the output files below.
+# Never hand-edit those files — edit schemas then regenerate.
+
+platforms:
+  ios:
+    path: ./ios
+    language: swift
+    output:
+      tokens:    ./ios/StarterApp/DesignSystem/Tokens/AppTokens.swift
+      strings:   ./ios/StarterApp/Resources/Strings.swift
+      flags:     ./ios/StarterApp/Core/FeatureFlags.swift
+      models:    ./ios/StarterApp/Core/Models/Models.swift
+      endpoints: ./ios/StarterApp/Core/Network/APIClientProtocol.swift
+
+  android:
+    path: ./android
+    language: kotlin
+    output:
+      tokens:    ./android/app/src/main/kotlin/com/starter/app/design/tokens/AppTokens.kt
+      strings:   ./android/app/src/main/res/values/strings-generated.xml
+      flags:     ./android/app/src/main/kotlin/com/starter/app/core/FeatureFlags.kt
+      models:    ./android/app/src/main/kotlin/com/starter/app/core/models/Models.kt
+      endpoints: ./android/app/src/main/kotlin/com/starter/app/core/network/APIClient.kt

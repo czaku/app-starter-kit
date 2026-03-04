@@ -1,0 +1,81 @@
+{
+  "$sentinel": "1.0",
+  "type": "endpoints",
+  "id": "auth-endpoints",
+  "description": "Magic link authentication",
+  "platforms": ["ios", "android", "api"],
+  "base": "/api/v1",
+  "endpoints": [
+    {
+      "id": "requestMagicLink",
+      "method": "POST",
+      "path": "/auth/magic-link/request",
+      "auth": false,
+      "description": "Request an 8-digit OTP sent to email",
+      "body": {
+        "fields": [
+          { "name": "email", "type": "String" }
+        ]
+      },
+      "response": {
+        "fields": [
+          { "name": "message", "type": "String" }
+        ]
+      }
+    },
+    {
+      "id": "verifyMagicLink",
+      "method": "POST",
+      "path": "/auth/magic-link/verify",
+      "auth": false,
+      "description": "Verify OTP and return tokens",
+      "body": {
+        "fields": [
+          { "name": "email", "type": "String" },
+          { "name": "code",  "type": "String" }
+        ]
+      },
+      "response": {
+        "fields": [
+          { "name": "accessToken",  "type": "String" },
+          { "name": "refreshToken", "type": "String" },
+          { "name": "user",         "type": "User"   }
+        ]
+      }
+    },
+    {
+      "id": "refreshToken",
+      "method": "POST",
+      "path": "/auth/refresh",
+      "auth": false,
+      "description": "Exchange refresh token for new access token",
+      "body": {
+        "fields": [
+          { "name": "refreshToken", "type": "String" }
+        ]
+      },
+      "response": {
+        "fields": [
+          { "name": "accessToken", "type": "String" }
+        ]
+      }
+    },
+    {
+      "id": "logout",
+      "method": "POST",
+      "path": "/auth/logout",
+      "auth": true,
+      "description": "Revoke refresh token",
+      "body": {
+        "fields": [
+          { "name": "refreshToken", "type": "String" }
+        ]
+      },
+      "response": {
+        "fields": [
+          { "name": "message", "type": "String" }
+        ]
+      }
+    }
+  ]
+}

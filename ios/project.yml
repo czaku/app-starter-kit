@@ -36,6 +36,18 @@ targets:
     platform: iOS
     sources:
       - path: StarterAppTests
+    resources:
+      - path: StarterAppTests/Fixtures
+    dependencies:
+      - target: StarterApp
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+  StarterAppUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: StarterAppUITests
     dependencies:
       - target: StarterApp
     settings:
@@ -52,6 +64,7 @@ schemes:
       config: Dev-Debug
       targets:
         - StarterAppTests
+        - StarterAppUITests
   StarterApp-Staging:
     build:
       targets:

@@ -55,5 +55,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Test
+      - name: Unit tests
         run: npm test
+
+      - name: E2E tests
+        run: npm run test:e2e
+
+      - name: Validate fixtures
+        working-directory: ${{ github.workspace }}
+        run: node scripts/validate-fixtures.js

@@ -1,0 +1,9 @@
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhYmMxMjMiLCJpYXQiOjE3MDkwMDAwMDAsImV4cCI6MTcwOTAwMDkwMH0.example",
+  "refreshToken": "550e8400-e29b-41d4-a716-446655440000",
+  "user": {
+    "id": "abc123",
+    "email": "user@example.com",
+    "displayName": null
+  }
+}
