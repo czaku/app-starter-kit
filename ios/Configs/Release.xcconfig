@@ -1,4 +1,4 @@
-PRODUCT_BUNDLE_IDENTIFIER = com.starter.app
-BUNDLE_DISPLAY_NAME = StarterApp
+PRODUCT_BUNDLE_IDENTIFIER = com.appstarterkit.app
+BUNDLE_DISPLAY_NAME = AppStarterKit
 API_BASE_URL = https://api.yourapp.com/api/v1
 ENVIRONMENT = production

@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "StarterApp"
+rootProject.name = "AppStarterKit"
 include(":app")

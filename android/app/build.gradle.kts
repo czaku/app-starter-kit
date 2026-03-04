@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.starter.app"
+    namespace = "com.appstarterkit.app"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.starter.app"
+        applicationId = "com.appstarterkit.app"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
@@ -26,7 +26,7 @@ android {
             versionNameSuffix = "-dev"
             buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:3000/api/v1\"")
             buildConfigField("String", "ENVIRONMENT", "\"development\"")
-            resValue("string", "app_name", "StarterApp (Dev)")
+            resValue("string", "app_name", "AppStarterKit (Dev)")
         }
         create("staging") {
             dimension = "environment"
@@ -34,13 +34,13 @@ android {
             versionNameSuffix = "-staging"
             buildConfigField("String", "API_BASE_URL", "\"https://api-staging.yourapp.com/api/v1\"")
             buildConfigField("String", "ENVIRONMENT", "\"staging\"")
-            resValue("string", "app_name", "StarterApp (Staging)")
+            resValue("string", "app_name", "AppStarterKit (Staging)")
         }
         create("prod") {
             dimension = "environment"
             buildConfigField("String", "API_BASE_URL", "\"https://api.yourapp.com/api/v1\"")
             buildConfigField("String", "ENVIRONMENT", "\"production\"")
-            resValue("string", "app_name", "StarterApp")
+            resValue("string", "app_name", "AppStarterKit")
         }
     }
 

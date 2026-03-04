@@ -2,7 +2,7 @@
 
 > Production-ready mobile app starter: NestJS + iOS (SwiftUI) + Android (Compose).
 > Magic link auth, design tokens, force update, offline-first.
-> Built as a template — rename `StarterApp` / `starter.app` to your app when using.
+> Built as a template — rename `AppStarterKit` / `starter.app` to your app when using.
 
 ---
 
@@ -34,15 +34,15 @@ app-starter-kit/
 ├── ios/
 │   ├── project.yml           # XcodeGen — 3 schemes: Dev, Staging, Release
 │   ├── Configs/              # xcconfig per scheme (API_BASE_URL, ENVIRONMENT)
-│   └── StarterApp/
-│       ├── App/              # StarterApp.swift, AppState.swift, RootView.swift
+│   └── AppStarterKit/
+│       ├── App/              # AppStarterKit.swift, AppState.swift, RootView.swift
 │       ├── Features/Auth/    # WelcomeView, EmailInputView, CodeEntryView (8-digit)
 │       ├── Features/Home/    # HomeView placeholder
 │       ├── DesignSystem/     # AppTokens.swift, AppButton, AppCard, AppTextField, etc.
 │       └── Core/             # APIClient, NetworkMonitor, KeychainHelper, NFRs
 ├── android/
 │   └── app/src/main/kotlin/com/starter/app/
-│       ├── app/              # StarterApp (Hilt), MainActivity
+│       ├── app/              # AppStarterKit (Hilt), MainActivity
 │       ├── features/auth/    # AuthNavHost, AuthViewModel, screens (Welcome → Email → Code)
 │       ├── features/home/    # HomeScreen placeholder
 │       ├── design/           # AppTokens, AppButton, AppCard, AppTextField, etc.
@@ -103,7 +103,7 @@ Token storage:
 - `@Environment` for DI (AppState passed down from root)
 - `async/await` everywhere — no Combine
 - All tokens from `AppTokens` — never hardcode colours or sizes
-- URLProtocol for test-time HTTP interception (see `StarterAppTests/Helpers/MockURLProtocol.swift`)
+- URLProtocol for test-time HTTP interception (see `AppStarterKitTests/Helpers/MockURLProtocol.swift`)
 
 ### Android (Kotlin / Compose)
 - MVVM with `ViewModel` + `StateFlow`
@@ -141,9 +141,9 @@ Three environments on every platform:
 
 | Env | iOS Scheme | Android Flavour |
 |-----|-----------|-----------------|
-| Dev | StarterApp-Dev | dev |
-| Staging | StarterApp-Staging | staging |
-| Prod | StarterApp-Release | prod |
+| Dev | AppStarterKit-Dev | dev |
+| Staging | AppStarterKit-Staging | staging |
+| Prod | AppStarterKit-Release | prod |
 
 API URLs set in xcconfig (iOS) and `buildConfigField` (Android).
 
@@ -160,9 +160,9 @@ See `docs/setup/GITHUB_ACTIONS.md` to activate automatic runs and add secrets.
 
 When using this as a template:
 
-1. Find/replace `StarterApp` → your app name
+1. Find/replace `AppStarterKit` → your app name
 2. Find/replace `starter.app` → your bundle ID prefix
-3. Find/replace `com.starter.app` → your Android package name
+3. Find/replace `com.appstarterkit.app` → your Android package name
 4. Update colours in `AppTokens.swift` (iOS) and `AppTokens.kt` (Android)
 5. Update API URLs in xcconfig files and `build.gradle.kts`
 6. Replace `YOUR_APP_ID` in `HardUpdateView.swift` / `ForceUpdateComponents.kt` with real App Store / Play Store IDs
@@ -173,7 +173,7 @@ When using this as a template:
 ## Testing
 
 ### iOS
-- `URLProtocol` mock infra: `StarterAppTests/Helpers/MockURLProtocol.swift`
+- `URLProtocol` mock infra: `AppStarterKitTests/Helpers/MockURLProtocol.swift`
 - Register with `URLProtocol.registerClass(MockURLProtocol.self)` in test setUp
 
 ### Android
@@ -196,7 +196,7 @@ When using this as a template:
 | `backend/.env.example` | All required environment variables |
 | `ios/project.yml` | XcodeGen project definition |
 | `ios/Configs/*.xcconfig` | Per-environment config (API URL, bundle ID) |
-| `ios/StarterApp/Core/NFR/` | Force update, offline banner, review prompt |
+| `ios/AppStarterKit/Core/NFR/` | Force update, offline banner, review prompt |
 | `android/gradle/libs.versions.toml` | All Android dependency versions |
 | `android/app/build.gradle.kts` | Flavour definitions |
 | `android/app/src/main/kotlin/.../nfr/` | Force update, offline banner, review prompt |

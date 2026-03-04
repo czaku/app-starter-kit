@@ -22,7 +22,7 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('App Starter Kit API')
+    .setTitle('AppStarterKit API')
     .setDescription('NestJS + Prisma + Magic Link Auth')
     .setVersion('1.0')
     .addBearerAuth()

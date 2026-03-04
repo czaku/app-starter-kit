@@ -17,7 +17,7 @@ set -euo pipefail
 
 BASE_URL="${API_BASE_URL:-http://localhost:3000/api/v1}"
 TOKEN="${1:-}"
-IOS_FIXTURES="ios/StarterAppTests/Fixtures"
+IOS_FIXTURES="ios/AppStarterKitTests/Fixtures"
 ANDROID_FIXTURES="android/app/src/test/resources/fixtures"
 
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)

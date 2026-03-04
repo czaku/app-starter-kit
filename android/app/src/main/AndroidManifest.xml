@@ -5,16 +5,16 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".app.StarterApp"
+        android:name=".app.AppStarterKit"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.StarterApp">
+        android:theme="@style/Theme.AppStarterKit">
         <activity
             android:name=".app.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.StarterApp">
+            android:theme="@style/Theme.AppStarterKit">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

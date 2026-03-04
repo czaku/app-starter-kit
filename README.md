@@ -25,7 +25,7 @@ Magic link auth, design tokens, offline indicator, force update, review prompt �
 ```bash
 # Use this repo as a GitHub template, then:
 find . -type f \( -name "*.swift" -o -name "*.kt" -o -name "*.ts" -o -name "*.json" -o -name "*.gradle.kts" -o -name "*.yml" -o -name "*.yaml" -o -name "*.md" -o -name "*.xml" -o -name "*.xcconfig" -o -name "*.plist" \) \
-  -exec sed -i '' 's/StarterApp/MyApp/g; s/starter\.app/myapp/g; s/app-starter-kit/my-app/g' {} \;
+  -exec sed -i '' 's/AppStarterKit/MyApp/g; s/starter\.app/myapp/g; s/app-starter-kit/my-app/g' {} \;
 ```
 
 ### 2. Backend
@@ -46,9 +46,9 @@ npm run start:dev             # http://localhost:3000/api/v1
 ```bash
 cd ios
 brew install xcodegen         # if not installed
-xcodegen generate             # generates StarterApp.xcodeproj
-open StarterApp.xcodeproj
-# Select scheme StarterApp-Dev and run
+xcodegen generate             # generates AppStarterKit.xcodeproj
+open AppStarterKit.xcodeproj
+# Select scheme AppStarterKit-Dev and run
 ```
 
 ### 4. Android
@@ -98,9 +98,9 @@ Three environments on every platform:
 
 | Env | iOS Scheme | Android Flavour | API URL |
 |-----|-----------|-----------------|---------|
-| Dev | StarterApp-Dev | dev | `http://localhost:3000/api/v1` (iOS: `http://10.0.2.2:3000/api/v1` Android) |
-| Staging | StarterApp-Staging | staging | `https://api-staging.yourapp.com/api/v1` |
-| Production | StarterApp-Release | prod | `https://api.yourapp.com/api/v1` |
+| Dev | AppStarterKit-Dev | dev | `http://localhost:3000/api/v1` (iOS: `http://10.0.2.2:3000/api/v1` Android) |
+| Staging | AppStarterKit-Staging | staging | `https://api-staging.yourapp.com/api/v1` |
+| Production | AppStarterKit-Release | prod | `https://api.yourapp.com/api/v1` |
 
 Update the URLs in `ios/Configs/*.xcconfig` and `android/app/build.gradle.kts`.
 
@@ -124,7 +124,7 @@ app-starter-kit/
 ├── ios/
 │   ├── project.yml           # XcodeGen config
 │   ├── Configs/              # xcconfig per env
-│   └── StarterApp/
+│   └── AppStarterKit/
 │       ├── App/              # Entry point, RootView, AppState
 │       ├── Features/Auth/    # Auth flow (Welcome → Email → Code)
 │       ├── Features/Home/    # Home placeholder
@@ -151,10 +151,10 @@ app-starter-kit/
 
 ## Customising for a new project
 
-1. **Rename**: find/replace `StarterApp` → your app name, `starter.app` → your bundle ID
+1. **Rename**: find/replace `AppStarterKit` → your app name, `starter.app` → your bundle ID
 2. **Colours**: update `AppTokens.Color.primary` (iOS) and `AppColors.Primary` (Android)
 3. **Backend URL**: update xcconfig files and `buildConfigField` in build.gradle.kts
-4. **App Store / Play Store links**: search for `YOUR_APP_ID` and `com.starter.app` in NFR files
+4. **App Store / Play Store links**: search for `YOUR_APP_ID` and `com.appstarterkit.app` in NFR files
 5. **Email template**: implement `email.processor.ts` with your SMTP or transactional email provider
 6. **Extend auth**: add user profile fields to Prisma schema + User module
 

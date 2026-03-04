@@ -14,18 +14,18 @@ platforms:
     path: ./ios
     language: swift
     output:
-      tokens:    ./ios/StarterApp/DesignSystem/Tokens/AppTokens.swift
-      strings:   ./ios/StarterApp/Resources/Strings.swift
-      flags:     ./ios/StarterApp/Core/FeatureFlags.swift
-      models:    ./ios/StarterApp/Core/Models/Models.swift
-      endpoints: ./ios/StarterApp/Core/Network/APIClientProtocol.swift
+      tokens:    ./ios/AppStarterKit/DesignSystem/Tokens/AppTokens.swift
+      strings:   ./ios/AppStarterKit/Resources/Strings.swift
+      flags:     ./ios/AppStarterKit/Core/FeatureFlags.swift
+      models:    ./ios/AppStarterKit/Core/Models/Models.swift
+      endpoints: ./ios/AppStarterKit/Core/Network/APIClientProtocol.swift
 
   android:
     path: ./android
     language: kotlin
     output:
-      tokens:    ./android/app/src/main/kotlin/com/starter/app/design/tokens/AppTokens.kt
+      tokens:    ./android/app/src/main/kotlin/com/appstarterkit/app/design/tokens/AppTokens.kt
       strings:   ./android/app/src/main/res/values/strings-generated.xml
-      flags:     ./android/app/src/main/kotlin/com/starter/app/core/FeatureFlags.kt
-      models:    ./android/app/src/main/kotlin/com/starter/app/core/models/Models.kt
-      endpoints: ./android/app/src/main/kotlin/com/starter/app/core/network/APIClient.kt
+      flags:     ./android/app/src/main/kotlin/com/appstarterkit/app/core/FeatureFlags.kt
+      models:    ./android/app/src/main/kotlin/com/appstarterkit/app/core/models/Models.kt
+      endpoints: ./android/app/src/main/kotlin/com/appstarterkit/app/core/network/APIClient.kt
