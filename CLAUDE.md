@@ -339,3 +339,4 @@ Rules:
 1. Every screen added to the app must have an entry in `sentinel.yaml → screens`
 2. `sentinel catalog:validate` must pass before marking any screen task done
 3. Luke reviews completed screens from `catalog/index.html`
+4. **Never create your own HTML screen viewer** — `sentinel catalog:index` is the only permitted way to produce a browsable catalog. Do not create `docs/screens.html`, `screens.html`, or any hand-crafted HTML mockup.
