@@ -300,43 +300,6 @@ simemu release starter-android
 
 ---
 
-## Screen Catalog — setup guide
+## Screen Catalog
 
-When building a real app from this template, configure the screen catalog in `sentinel.yaml`. The catalog generates platform-specific screenshots in light/dark mode (plus iOS 26 glossy variants) for every screen. Luke reviews all screens from `catalog/index.html` before approving UI work.
-
-Update the `catalog:` section in `sentinel.yaml` with your project's slugs and bundle IDs:
-```yaml
-catalog:
-  output: catalog/
-  resize: 1000
-  ios18:
-    slug: {your-app}-ios          # matches simemu acquire slug
-    app_id: {your.bundle.id}
-  ios26:
-    slug: {your-app}-ios26
-    app_id: {your.bundle.id}
-    glossy: true
-  android:
-    slug: {your-app}-android      # matches simemu acquire slug
-    app_id: {your.android.package}
-  screens:
-    - slug: welcome
-      flow: flows/welcome.yaml
-    - slug: sign-in
-      flow: flows/sign-in.yaml
-    - slug: home
-      flow: flows/home.yaml
-```
-
-Commands:
-```bash
-sentinel catalog:capture       # capture all screens
-sentinel catalog:validate      # verify all shots exist
-sentinel catalog:index         # regenerate catalog/index.html
-```
-
-Rules:
-1. Every screen added to the app must have an entry in `sentinel.yaml → screens`
-2. `sentinel catalog:validate` must pass before marking any screen task done
-3. Luke reviews completed screens from `catalog/index.html`
-4. **Never create your own HTML screen viewer** — `sentinel catalog:index` is the only permitted way to produce a browsable catalog. Do not create `docs/screens.html`, `screens.html`, or any hand-crafted HTML mockup.
+Sentinel manages the screen catalog. Read `SENTINEL.md` — adherence required.
