@@ -300,6 +300,6 @@ simemu release starter-android
 
 ---
 
-## Screen Catalog
+## Sentinel
 
-Sentinel manages the screen catalog. Read `SENTINEL.md` — adherence required.
+Read `SENTINEL.md` — adherence required. Covers setup, schema workflow, and screen catalog.

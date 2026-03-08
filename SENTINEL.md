@@ -6,6 +6,21 @@ Sentinel is the source of truth for cross-platform consistency: design tokens, s
 
 ---
 
+## First-Time Setup
+
+Sentinel is installed as a local dependency linked from `~/dev/sentinel`:
+
+```bash
+npm install   # links sentinel from the local checkout
+```
+
+If `npm install` fails because `~/dev/sentinel` is missing, clone it first:
+```bash
+git clone https://github.com/czaku/sentinel.git ~/dev/sentinel
+```
+
+---
+
 ## Before Every Task
 
 ```bash
