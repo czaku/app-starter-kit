@@ -1,7 +1,6 @@
-# Deploy backend to Cloud Run
+# Deploy backend to Railway
 # Manual trigger with environment selection.
-# Prerequisite: Set up GCP service account and add GOOGLE_CREDENTIALS secret.
-# See infra/terraform/README.md for full setup instructions.
+# Prerequisite: Add RAILWAY_TOKEN secret (Settings → Tokens in Railway dashboard).
 
 name: deploy
 
@@ -27,60 +26,36 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
 
-    env:
-      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-      REGION: ${{ vars.GCP_REGION || 'us-central1' }}
-      SERVICE_NAME: appstarterkit-backend-${{ github.event.inputs.environment }}
-      IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/appstarterkit-backend
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
+      - uses: pnpm/action-setup@v3
         with:
-          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+          version: 9
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: backend/pnpm-lock.yaml
 
-      - name: Configure Docker for GCR
-        run: gcloud auth configure-docker --quiet
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
 
-      - name: Build and push Docker image
+      - name: Deploy to Railway
         working-directory: backend
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest .
-          docker push $IMAGE:${{ github.sha }}
-          docker push $IMAGE:latest
-
-      - name: Deploy to Cloud Run
-        run: |
-          gcloud run deploy $SERVICE_NAME \
-            --image $IMAGE:${{ github.sha }} \
-            --platform managed \
-            --region $REGION \
-            --allow-unauthenticated \
-            --set-env-vars="NODE_ENV=${{ github.event.inputs.environment }}" \
-            --set-secrets="DATABASE_URL=DATABASE_URL_${{ github.event.inputs.environment }}:latest,JWT_SECRET=JWT_SECRET:latest,REDIS_URL=REDIS_URL_${{ github.event.inputs.environment }}:latest" \
-            --min-instances=0 \
-            --max-instances=10 \
-            --memory=512Mi \
-            --cpu=1 \
-            --timeout=30 \
-            --quiet
+          railway up --environment ${{ github.event.inputs.environment }} --detach
+          echo "Deployment triggered for environment: ${{ github.event.inputs.environment }}"
 
       - name: Run migrations
         if: ${{ github.event.inputs.run_migrations == 'true' }}
+        working-directory: backend
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          # Run migrations via Cloud Run Job (one-off task)
-          gcloud run jobs execute migrate-${{ github.event.inputs.environment }} \
-            --region $REGION \
-            --wait \
-            --quiet || echo "Migration job not set up yet — run manually"
-
-      - name: Get service URL
-        run: |
-          URL=$(gcloud run services describe $SERVICE_NAME --platform managed --region $REGION --format 'value(status.url)')
-          echo "Deployed to: $URL"
-          echo "Health check: $URL/health"
+          railway run --environment ${{ github.event.inputs.environment }} \
+            -- npx prisma migrate deploy
+          echo "Migrations complete"

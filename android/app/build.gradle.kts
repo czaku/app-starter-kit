@@ -97,12 +97,16 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation(libs.biometric)
 
-    // TODO: Add google-services.json from Firebase Console, then uncomment these dependencies
-    //       and apply plugin 'com.google.gms.google-services' + 'com.google.firebase.crashlytics'
-    // val firebaseBom = platform("com.google.firebase:firebase-bom:32.7.0")
+    // Firebase — add google-services.json from Firebase Console, then apply plugins:
+    //   'com.google.gms.google-services' + 'com.google.firebase.crashlytics'
+    // val firebaseBom = platform("com.google.firebase:firebase-bom:33.0.0")
     // implementation(firebaseBom)
     // implementation("com.google.firebase:firebase-crashlytics-ktx")
     // implementation("com.google.firebase:firebase-analytics-ktx")
+    // implementation("com.google.firebase:firebase-messaging-ktx")  // FCM push notifications
+
+    // Google Play Billing — in-app purchases and subscriptions (StoreKit 2 equivalent on Android)
+    implementation(libs.billing)
     testImplementation(libs.junit5.api)
     testImplementation(libs.junit5.params)
     testRuntimeOnly(libs.junit5.engine)

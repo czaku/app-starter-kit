@@ -1,9 +1,5 @@
 import Foundation
-
-// RevenueCat integration stub
-// TODO: Install RevenueCat SDK via Swift Package Manager:
-//   .package(url: "https://github.com/RevenueCat/purchases-ios", from: "4.0.0")
-//   then: import RevenueCat
+import StoreKit
 
 enum SubscriptionTier: String {
     case free = "free"
@@ -11,16 +7,8 @@ enum SubscriptionTier: String {
 }
 
 enum TrackerFeature {
-    case basicLogging, exerciseLibrary         // Always free
+    case basicLogging, exerciseLibrary             // Always free
     case unlimitedTemplates, advancedAnalytics, exportData  // Tracker+
-}
-
-enum SubscriptionError: LocalizedError {
-    case notConfigured
-
-    var errorDescription: String? {
-        "Subscription not configured. See SubscriptionManager.swift TODO comments."
-    }
 }
 
 @Observable
@@ -31,45 +19,108 @@ final class SubscriptionManager {
     var currentTier: SubscriptionTier = .free
     var isLoading: Bool = false
 
-    // TODO: Replace with your RevenueCat API key from the RevenueCat dashboard.
-    private let apiKey = "YOUR_REVENUECAT_PUBLIC_API_KEY"
+    // Product IDs — must match App Store Connect exactly
+    private let trackerMonthlyId = "tracker_monthly"
+    private let trackerYearlyId  = "tracker_yearly"
+    private let trackerLifetimeId = "tracker_lifetime"
 
-    /// Call once at app launch, after the user ID is known.
-    /// - Parameter userId: The authenticated user's ID to associate purchases with.
-    func configure(userId: String) {
-        // TODO: Uncomment after adding RevenueCat SDK:
-        // Purchases.logLevel = .debug
-        // Purchases.configure(withAPIKey: apiKey, appUserID: userId)
+    private var products: [Product] = []
+    private var purchaseListener: Task<Void, Never>?
+
+    init() {
+        purchaseListener = listenForTransactions()
+        Task { await loadProducts() }
     }
 
-    /// Loads available offerings from RevenueCat.
-    func fetchOfferings() async {
+    deinit {
+        purchaseListener?.cancel()
+    }
+
+    // MARK: — Products
+
+    func loadProducts() async {
         isLoading = true
-        // TODO: let offerings = try? await Purchases.shared.offerings()
+        do {
+            products = try await Product.products(for: [
+                trackerMonthlyId, trackerYearlyId, trackerLifetimeId,
+            ])
+        } catch {
+            // Silent failure — paywall shows empty state with retry
+        }
         isLoading = false
     }
 
-    /// Initiates a purchase for the given product ID.
-    /// - Parameter productId: The RevenueCat product identifier (e.g. "tracker_monthly").
-    func purchase(productId: String) async throws {
-        // TODO: Resolve the matching Package from offerings, then:
-        // let result = try await Purchases.shared.purchase(package: package)
-        // if !result.userCancelled { currentTier = .tracker }
-        throw SubscriptionError.notConfigured
+    func product(for id: String) -> Product? {
+        products.first { $0.id == id }
     }
 
-    /// Restores previous purchases for the current user.
+    // MARK: — Purchase
+
+    func purchase(_ product: Product) async throws {
+        let result = try await product.purchase()
+        switch result {
+        case .success(let verification):
+            let transaction = try checkVerified(verification)
+            await transaction.finish()
+            await refreshEntitlements()
+        case .userCancelled:
+            break
+        case .pending:
+            break
+        @unknown default:
+            break
+        }
+    }
+
     func restorePurchases() async throws {
-        // TODO: try await Purchases.shared.restorePurchases()
+        try await AppStore.sync()
+        await refreshEntitlements()
     }
 
-    /// Returns `true` when the user has access to the given feature.
+    // MARK: — Entitlements
+
+    func refreshEntitlements() async {
+        for await result in Transaction.currentEntitlements {
+            guard let transaction = try? checkVerified(result) else { continue }
+            if transaction.productID == trackerMonthlyId ||
+               transaction.productID == trackerYearlyId ||
+               transaction.productID == trackerLifetimeId {
+                currentTier = .tracker
+                return
+            }
+        }
+        currentTier = .free
+    }
+
     func isFeatureAvailable(_ feature: TrackerFeature) -> Bool {
         switch feature {
         case .basicLogging, .exerciseLibrary:
-            return true  // Always available on free tier
+            return true
         case .unlimitedTemplates, .advancedAnalytics, .exportData:
             return currentTier == .tracker
         }
     }
+
+    // MARK: — Transaction listener
+
+    private func listenForTransactions() -> Task<Void, Never> {
+        Task.detached {
+            for await result in Transaction.updates {
+                guard let transaction = try? self.checkVerified(result) else { continue }
+                await self.refreshEntitlements()
+                await transaction.finish()
+            }
+        }
+    }
+
+    private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
+        switch result {
+        case .unverified: throw StoreError.failedVerification
+        case .verified(let value): return value
+        }
+    }
+}
+
+enum StoreError: Error {
+    case failedVerification
 }

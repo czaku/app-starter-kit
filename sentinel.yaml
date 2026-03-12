@@ -33,14 +33,29 @@ platforms:
 catalog:
   output: catalog/
   resize: 1000
+
+  # Declare only the OS + device combinations your app supports.
+  # Add ipad/tablet entries when you support those form factors.
   ios18:
-    slug: starter-ios           # update to match your simemu slug when using this template
-    app_id: starter.app.dev     # update to match your bundle ID
+    iphone:
+      slug: starter-ios           # update to your simemu slug
+      app_id: starter.app.dev     # update to your bundle ID
+    # ipad:
+    #   slug: starter-ipad
+    #   app_id: starter.app.dev
+
   ios26:
-    slug: starter-ios26
-    app_id: starter.app.dev
-    glossy: true
+    iphone:
+      slug: starter-ios26
+      app_id: starter.app.dev
+      glossy: true                # captures glossy-light + glossy-dark variants too
+
   android:
-    slug: starter-android
-    app_id: com.appstarterkit.app  # update to match your Android package
+    phone:
+      slug: starter-android
+      app_id: com.appstarterkit.app  # update to your Android package
+    # tablet:
+    #   slug: starter-tablet
+    #   app_id: com.appstarterkit.app
+
   screens: []  # add screens as you build them — slug + flow path required
