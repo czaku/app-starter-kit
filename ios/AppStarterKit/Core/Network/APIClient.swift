@@ -158,3 +158,17 @@ actor APIClient {
         return try await task.value
     }
 }
+
+// MARK: - SyncAPIClient
+
+extension APIClient: SyncAPIClient {
+    func syncPush(changes: [SyncChange], deviceId: String) async throws -> SyncPushResponse {
+        // TODO: implement POST /sync/push
+        throw APIError.serverError(501, "sync push not yet implemented")
+    }
+
+    func syncPull(since: Date?, collections: [String]) async throws -> SyncPullResponse<SyncChange> {
+        // TODO: implement GET /sync/pull
+        throw APIError.serverError(501, "sync pull not yet implemented")
+    }
+}

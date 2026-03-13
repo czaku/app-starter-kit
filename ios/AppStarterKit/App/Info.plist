@@ -31,5 +31,9 @@
     <string>AppStarterKit uses Face ID to protect your account.</string>
     <key>UILaunchScreen</key>
     <dict/>
+    <key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+        <string>$(PRODUCT_BUNDLE_IDENTIFIER).sync.background</string>
+    </array>
 </dict>
 </plist>

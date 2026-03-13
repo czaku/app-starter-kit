@@ -1,5 +1,23 @@
 import SwiftUI
 
+// MARK: - SyncableRecord Example
+//
+// To make a model sync-aware, conform it to SyncableRecord:
+//
+//   @Observable
+//   final class HomeModel: SyncableRecord {
+//       var id: String = UUID().uuidString
+//       var updatedAt: Date = .now
+//       var pendingSync: Bool = false
+//       var syncAction: SyncAction? = nil
+//       var lastSyncedAt: Date? = nil
+//
+//       // Your model's own fields:
+//       var title: String = ""
+//   }
+//
+// Then inject SyncEngine from AppState and call syncEngine.sync() on appear.
+
 struct HomeView: View {
     @Environment(AppState.self) private var appState
     @State private var showLogoutConfirmation = false

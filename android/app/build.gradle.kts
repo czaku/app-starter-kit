@@ -96,6 +96,9 @@ dependencies {
     implementation("com.google.android.play:review-ktx:2.0.1")
     implementation("androidx.compose.material:material-icons-extended")
     implementation(libs.biometric)
+    implementation(libs.workmanager)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.work.compiler)
 
     // Firebase — add google-services.json from Firebase Console, then apply plugins:
     //   'com.google.gms.google-services' + 'com.google.firebase.crashlytics'

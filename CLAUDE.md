@@ -133,6 +133,15 @@ Token storage:
 - Android: `ReviewManager` → Play In-App Review API
 - 7-day cooldown between prompts — stored in `UserDefaults` / `SharedPreferences`
 
+### Offline-First Sync
+- Protocol-based, persistence-agnostic — apps provide concrete `SyncRepository` and `SyncableRecord` implementations
+- iOS: `SyncEngine` (`@Observable`) in `Core/Sync/` — push/pull via `SyncAPIClient`, 30s polling, BGTaskScheduler background refresh
+- Android: `SyncEngine` (`@Singleton`) in `core/sync/` — `StateFlow<SyncState>`, `WorkManager` 15-min periodic sync
+- **Conflict strategies:** serverWins | clientWins | mostRecent | merge | manual
+- **Retry:** exponential backoff — 5 attempts max, 2^n × 2s delay, capped at 300s
+- **HTTP contract:** `POST /sync/push` + `GET /sync/pull` — see `docs/sync/SYNC_CONTRACT.md`
+- To adopt in a new app: implement `SyncableRecord` (iOS) / `SyncableEntity` (Android) on your models, implement `SyncRepository`, inject `SyncEngine` from `AppState` / Hilt
+
 ---
 
 ## Build Environments
@@ -215,6 +224,9 @@ cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 | `android/app/src/main/kotlin/.../nfr/` | Force update, offline banner, review prompt |
 | `sentinel/schemas/design/tokens.json` | Design token source of truth |
 | `docs/setup/GITHUB_ACTIONS.md` | CI setup guide |
+| `ios/AppStarterKit/Core/Sync/` | Sync engine protocols, engine, queue, metrics |
+| `android/app/src/main/kotlin/.../core/sync/` | Sync engine, worker, DI module |
+| `docs/sync/SYNC_CONTRACT.md` | HTTP push/pull API contract |
 
 ---
 
