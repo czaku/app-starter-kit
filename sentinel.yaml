@@ -59,3 +59,27 @@ catalog:
     #   app_id: com.appstarterkit.app
 
   screens: []  # add screens as you build them — slug + flow path required
+
+quality:
+  commit-format: "^(feat|fix|chore|docs|refactor|test):"
+  require-pushed: true
+  include:
+    - "backend/src/**/*.{ts,tsx}"
+  exclude:
+    - "node_modules/**"
+    - "dist/**"
+    - "*.test.*"
+    - "*.spec.*"
+  banned-patterns:
+    - pattern: "as any"
+      severity: error
+      message: "Type safety bypass: as any"
+    - pattern: "@ts-ignore"
+      severity: error
+      message: "Type safety bypass: @ts-ignore"
+    - pattern: "TODO: implement"
+      severity: error
+      message: "Stub code: TODO implement"
+    - pattern: "NotImplementedError"
+      severity: error
+      message: "Stub code: NotImplementedError"

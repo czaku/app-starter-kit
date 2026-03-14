@@ -38,7 +38,9 @@ struct PaywallView: View {
                 // CTA buttons
                 VStack(spacing: AppTokens.Spacing.sm) {
                     AppButton(label: "Start 7-day free trial", style: .primary) {
-                        try? await subscriptionManager.purchase(productId: "tracker_monthly")
+                        if let product = subscriptionManager.product(for: "tracker_monthly") {
+                            try? await subscriptionManager.purchase(product)
+                        }
                     }
 
                     Button("Restore purchases") {

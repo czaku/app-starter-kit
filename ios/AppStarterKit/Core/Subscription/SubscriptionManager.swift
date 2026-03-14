@@ -25,7 +25,7 @@ final class SubscriptionManager {
     private let trackerLifetimeId = "tracker_lifetime"
 
     private var products: [Product] = []
-    private var purchaseListener: Task<Void, Never>?
+    nonisolated(unsafe) private var purchaseListener: Task<Void, Never>?
 
     init() {
         purchaseListener = listenForTransactions()
@@ -113,7 +113,7 @@ final class SubscriptionManager {
         }
     }
 
-    private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
+    nonisolated private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
         switch result {
         case .unverified: throw StoreError.failedVerification
         case .verified(let value): return value
